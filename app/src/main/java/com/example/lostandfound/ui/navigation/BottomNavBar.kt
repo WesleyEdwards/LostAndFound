@@ -74,9 +74,10 @@ sealed class BottomBarScreen(
     )
 
     object Reports : BottomBarScreen(
-        route = Routes.LostReports,
+        route = Routes.MyReports,
         icon = R.drawable.ic_baseline_text_snippet_24
     )
+
     object Conversations : BottomBarScreen(
         route = Routes.Conversations,
         icon = R.drawable.ic_baseline_message_24

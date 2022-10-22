@@ -5,7 +5,7 @@ object Routes {
     const val SignIn = "sign_in"
 
     const val Home = "home"
-    const val LostReports = "lost_reports"
+    const val MyReports = "my_reports"
     const val Profile = "profile"
 
     const val Conversations = "conversations"
@@ -16,7 +16,7 @@ object Routes {
     const val LostReportEdit = "lost_report_edit/{reportId}"
 
     val getLostReportView = { reportId: String -> "lost_report_view/$reportId" }
-    val getCharacterEdit = { reportId: String -> "lost_report_edit/$reportId" }
+    val getReportEdit = { reportId: String -> "lost_report_edit/$reportId" }
 }
 
 object GraphRoutes {

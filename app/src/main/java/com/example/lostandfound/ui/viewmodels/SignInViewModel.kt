@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.repositories.UserRepo
 
 class SignInState {
@@ -19,6 +20,7 @@ class SignInState {
 class SignInViewModel(application: Application) : AndroidViewModel(application) {
 
     val state = SignInState()
+
     suspend fun signIn() {
         state.signInError = false
         state.errorMessage = ""
@@ -36,7 +38,9 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             state.errorMessage = e.message ?: "Unknown error"
         } finally {
             state.loading = false
-            if (UserRepo.isUserLoggedIn()) { state.loginSuccess = true }
+            if (UserRepo.isUserLoggedIn()) {
+                state.loginSuccess = true
+            }
         }
     }
 

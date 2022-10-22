@@ -70,7 +70,7 @@ class CreateAccountViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    private suspend fun setUserDisplayName(displayName: String) {
+    private fun setUserDisplayName(displayName: String) {
         try {
             UserRepo.updateUserDisplayName(displayName)
         } catch (e: Exception) {

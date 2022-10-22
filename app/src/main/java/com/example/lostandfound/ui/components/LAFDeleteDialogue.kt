@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun RPGDeleteDialogue(
+fun LAFDeleteDialogue(
     open: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
