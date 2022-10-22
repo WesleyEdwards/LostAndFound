@@ -12,11 +12,10 @@ data class Report(
 )
 
 data class ReportStats(
-    val title: String = "",
-    val description: String = "",
-    val location: String = "",
-    val date: String = "",
-    val image: String = "",
-    val type: String = "",
+    val title: String = "Default Title",
+    val description: String = "no description",
+    val location: String = "No Location",
+    val date: String = "Today",
+    val image: String = "No image",
     val status: ReportStatus = ReportStatus.LOST
 )

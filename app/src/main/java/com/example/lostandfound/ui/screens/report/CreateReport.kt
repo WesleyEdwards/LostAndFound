@@ -81,7 +81,7 @@ fun CreateReportView(
 
 
             LAFFormField(
-                value = state.reportStats.description,
+                value = state.reportStats.description ?: "",
                 onValueChange = { viewModel.setReportStats(state.reportStats.copy(description = it)) },
                 label = "Description",
                 placeholder = "Very Kind and wouldn't hurt a soul",

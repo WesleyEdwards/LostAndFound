@@ -35,10 +35,15 @@ object ReportRepo {
     suspend fun getAllReports(): List<Report> {
         println("Getting all reports")
         val reports = Firebase.firestore.collection(collectionPath)
-            .get().await()
-            .toObjects<Report>()
-        println("Reports: $reports")
-        return reports
+            .get().addOnSuccessListener { result ->
+                for (document in result) {
+                    println("${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                println("Failure, Error getting documents: ")
+            }
+        return reports.await().toObjects<Report>()
     }
 
     suspend fun getReport(reportId: String): Report? {
