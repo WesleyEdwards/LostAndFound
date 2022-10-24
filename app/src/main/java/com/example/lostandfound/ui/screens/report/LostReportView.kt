@@ -86,28 +86,30 @@ fun LostReportView(reportId: String, navController: NavHostController) {
             Box(
                 modifier = Modifier.size(28.dp)
             ) {
-                IconButton(onClick = { state.menuExpanded = true }) {
-                    Icon(Icons.Default.MoreVert, contentDescription = "More options")
-                }
-                DropdownMenu(
-                    expanded = state.menuExpanded,
-                    onDismissRequest = { state.menuExpanded = false }
-                ) {
-                    DropdownMenuItem(onClick = {
-                        navController.navigate(
-                            Routes.getReportEdit(
-                                reportId
-                            )
-                        )
-                        state.menuExpanded = false
-                    }) {
-                        Text("Edit")
+                if (state.myReport) {
+                    IconButton(onClick = { state.menuExpanded = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "More options")
                     }
-                    DropdownMenuItem(onClick = {
-                        state.deleteDialogue = true
-                        state.menuExpanded = false
-                    }) {
-                        Text("Delete")
+                    DropdownMenu(
+                        expanded = state.menuExpanded,
+                        onDismissRequest = { state.menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(onClick = {
+                            navController.navigate(
+                                Routes.getReportEdit(
+                                    reportId
+                                )
+                            )
+                            state.menuExpanded = false
+                        }) {
+                            Text("Edit")
+                        }
+                        DropdownMenuItem(onClick = {
+                            state.deleteDialogue = true
+                            state.menuExpanded = false
+                        }) {
+                            Text("Delete")
+                        }
                     }
                 }
             }

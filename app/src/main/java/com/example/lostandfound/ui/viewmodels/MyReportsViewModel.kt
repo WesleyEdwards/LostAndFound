@@ -28,6 +28,7 @@ class MyReportsViewModel(application: Application) : AndroidViewModel(applicatio
             val reports = ReportRepo.getMyReports()
             state._reportList.clear()
             state._reportList.addAll(reports)
+            println("reports: ${reports}")
         } catch (e: Exception) {
             state.errorMessage = e.message ?: "Unknown error"
         } finally {

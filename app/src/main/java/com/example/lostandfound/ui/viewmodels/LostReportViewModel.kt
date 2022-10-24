@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.repositories.ReportRepo
+import com.example.lostandfound.ui.repositories.UserRepo
 
 class LostReportScreenState() {
     var _report by mutableStateOf<Report?>(null)
@@ -16,6 +17,7 @@ class LostReportScreenState() {
     var menuExpanded by mutableStateOf(false)
     var deleteDialogue by mutableStateOf(false)
     var confirmDelete by mutableStateOf(false)
+    var myReport by mutableStateOf(false)
 
     var loading by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
@@ -32,6 +34,7 @@ class LostReportViewModel(application: Application) : AndroidViewModel(applicati
         try {
             val report = ReportRepo.getReport(reportId)
             state._report = report
+            state.myReport = report?.userId == UserRepo.getUser()?.uid
         } catch (e: Exception) {
             state.errorMessage = e.message ?: "Unknown error"
         } finally {

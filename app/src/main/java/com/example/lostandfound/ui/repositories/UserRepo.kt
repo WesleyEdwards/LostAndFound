@@ -29,7 +29,7 @@ object UserRepo {
     }
 
     fun logoutUser() {
-        // Clear Cache
+        ReportRepo.clearCache()
         auth.signOut()
     }
 

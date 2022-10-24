@@ -43,5 +43,4 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
-
 }
