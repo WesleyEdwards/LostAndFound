@@ -13,9 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -26,7 +23,7 @@ import com.example.lostandfound.ui.viewmodels.LostReportViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun LostReportView(reportId: String, navController: NavHostController) {
+fun MyReportView(reportId: String, navController: NavHostController) {
 
     val viewModel: LostReportViewModel = viewModel()
     val state = viewModel.state
@@ -46,6 +43,12 @@ fun LostReportView(reportId: String, navController: NavHostController) {
     if (state.report == null) {
         LAFLoadingCircle(); return
     }
+
+    LAFDeleteDialogue(
+        open = state.deleteDialogue,
+        onDismiss = { state.deleteDialogue = false },
+        onConfirm = { scope.launch { viewModel.deleteReport(reportId) } }
+    )
 
     Column(
         modifier = Modifier
@@ -77,7 +80,36 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 }
             )
 
-            Box(modifier = Modifier.size(28.dp))
+            Box(
+                modifier = Modifier.size(28.dp)
+            ) {
+                if (state.myReport) {
+                    IconButton(onClick = { state.menuExpanded = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                    }
+                    DropdownMenu(
+                        expanded = state.menuExpanded,
+                        onDismissRequest = { state.menuExpanded = false }
+                    ) {
+                        DropdownMenuItem(onClick = {
+                            navController.navigate(
+                                Routes.getReportEdit(
+                                    reportId
+                                )
+                            )
+                            state.menuExpanded = false
+                        }) {
+                            Text("Edit")
+                        }
+                        DropdownMenuItem(onClick = {
+                            state.deleteDialogue = true
+                            state.menuExpanded = false
+                        }) {
+                            Text("Delete")
+                        }
+                    }
+                }
+            }
         }
         Column(
             modifier = Modifier.fillMaxSize()
@@ -94,13 +126,6 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                     modifier = Modifier.padding(4.dp)
                 )
             }
-        }
-        Button(
-            modifier = Modifier
-                .padding(16.dp, 32.dp)
-                .align(alignment = Alignment.CenterHorizontally),
-            onClick = { print("TODO") }) {
-            Text("Contact Victim")
         }
     }
 }

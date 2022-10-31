@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.example.lostandfound.ui.components.LAFLoadingCircle
 import com.example.lostandfound.ui.components.ReportCard
 import com.example.lostandfound.ui.navigation.Routes
+import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.viewmodels.HomeViewModel
 
 @Composable

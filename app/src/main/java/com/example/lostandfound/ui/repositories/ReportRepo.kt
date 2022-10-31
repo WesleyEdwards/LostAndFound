@@ -78,4 +78,8 @@ object ReportRepo {
         reportsCache.clear()
         cacheInitialized = false
     }
+
+    fun isMyReport(reportId: String): Boolean {
+        return reportsCache.firstOrNull() { it._id == reportId }?.userId == UserRepo.getUser()?.uid
+    }
 }
