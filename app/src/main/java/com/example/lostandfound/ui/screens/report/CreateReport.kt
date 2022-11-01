@@ -85,6 +85,8 @@ fun CreateReportView(
             )
         }
 
+        MyLocation()
+
         if (updateReport != null) {
             LAFLoadingButton(
                 onClick = { scope.launch { updateReport(state.reportStats) } },
