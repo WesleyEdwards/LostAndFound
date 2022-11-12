@@ -85,7 +85,12 @@ fun CreateReportView(
             )
         }
 
-        MyLocation()
+        MyLocation(setLocation = { viewModel.setReportStats(state.reportStats.copy(location = it)) })
+
+        if (state.reportStats.location != "") {
+            Text(text = "Your location is ${state.reportStats.location}")
+        }
+
 
         if (updateReport != null) {
             LAFLoadingButton(

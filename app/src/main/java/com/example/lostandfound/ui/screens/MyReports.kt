@@ -1,6 +1,7 @@
 package com.example.lostandfound.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.lostandfound.ui.components.LAFLoadingCircle
+import com.example.lostandfound.ui.components.LAFTitleBar
 import com.example.lostandfound.ui.components.ReportCard
 import com.example.lostandfound.ui.navigation.Routes
 import com.example.lostandfound.ui.viewmodels.MyReportsViewModel
@@ -48,23 +50,31 @@ fun MyReports(navController: NavController) {
             LAFLoadingCircle()
             return@Scaffold
         }
-        if (state.reportList.isEmpty()) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = "You have not created any reports yet. Tap the + button to create one.",
-                    color = Color.Gray,
-                    fontStyle = FontStyle.Italic,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(24.dp)
-                )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+
+            LAFTitleBar(title = "My Lost Reports")
+            if (state.reportList.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    Text(
+                        text = "You have not created any reports yet. Tap the + button to create one.",
+                        color = Color.Gray,
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(24.dp)
+                    )
+                }
             }
-        }
-        LazyColumn {
-            items(state.reportList, key = { it._id }) { report ->
-                ReportCard(report = report, onClick = {
-                    navController.navigate(Routes.getLostReportView(report._id))
-                })
+            LazyColumn {
+                items(state.reportList, key = { it._id }) { report ->
+                    ReportCard(report = report, onClick = {
+                        navController.navigate(Routes.getMyReportView(report._id))
+                    })
+                }
             }
         }
     }

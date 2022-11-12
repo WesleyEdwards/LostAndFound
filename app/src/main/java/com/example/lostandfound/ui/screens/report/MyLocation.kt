@@ -16,9 +16,8 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
 @Composable
-fun MyLocation() {
+fun MyLocation(setLocation: (String) -> Unit) {
     val context = LocalContext.current
-    val locationText = remember { mutableStateOf("") }
 
     val permissionGranted = remember { mutableStateOf(false) }
     val launcher = rememberLauncherForActivityResult(
@@ -46,28 +45,21 @@ fun MyLocation() {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
                     val location = result.lastLocation
-                    locationText.value =
-                        "Lat: ${location?.latitude} Long: ${location?.longitude}"
+                    setLocation("Lat: ${location?.latitude} Long: ${location?.longitude}")
                 }
             }
             client.requestLocationUpdates(
-                LocationRequest.create().apply {
-                    interval = 10000
-                    fastestInterval = 5000
-                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                },
+                LocationRequest.Builder(10_000).build(),
                 locationCallback,
                 Looper.getMainLooper()
             )
             onDispose { // clean up event listener
                 client.removeLocationUpdates(locationCallback)
-
             }
         } else {
             onDispose { }
         }
     }
 
-    Text(text = "Your location is ${locationText.value}")
 
 }

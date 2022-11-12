@@ -13,9 +13,11 @@ object Routes {
     const val CreateLostReport = "create_lost_report"
 
     const val LostReportView = "lost_report_view/{reportId}"
+    const val MyReportView = "my_report_view/{reportId}"
     const val LostReportEdit = "lost_report_edit/{reportId}"
 
     val getLostReportView = { reportId: String -> "lost_report_view/$reportId" }
+    val getMyReportView = { reportId: String -> "my_report_view/$reportId" }
     val getReportEdit = { reportId: String -> "lost_report_edit/$reportId" }
 }
 
