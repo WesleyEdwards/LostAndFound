@@ -36,11 +36,10 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
             UserRepo.loginUser(state.email, state.password)
         } catch (e: Exception) {
             state.errorMessage = e.message ?: "Unknown error"
+            println("Error: ${e.message}")
         } finally {
             state.loading = false
-            if (UserRepo.isUserLoggedIn()) {
-                state.loginSuccess = true
-            }
+            if (UserRepo.isUserLoggedIn()) { state.loginSuccess = true }
         }
     }
 }
