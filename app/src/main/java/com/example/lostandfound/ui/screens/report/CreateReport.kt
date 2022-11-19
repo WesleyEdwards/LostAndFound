@@ -4,15 +4,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lostandfound.ui.components.LAFFormField
 import com.example.lostandfound.ui.components.LAFLoadingButton
+import com.example.lostandfound.ui.components.GetLocationView
+import com.example.lostandfound.ui.components.LAFHeader
 import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.navigation.GraphRoutes
@@ -30,7 +30,10 @@ fun CreateReportView(
     val viewModel: CreateReportViewModel = viewModel()
     val state = viewModel.state
     val scope = rememberCoroutineScope()
+    val getLocation = remember { mutableStateOf(false) }
 
+
+    GrantPermission()
 
     LaunchedEffect(state.creationSuccess) {
         if (state.creationSuccess) {
@@ -41,6 +44,18 @@ fun CreateReportView(
         if (initialReport != null) {
             viewModel.setReport(initialReport)
         }
+    }
+
+    if (getLocation.value) {
+        GetLocationView(changeLocation = {
+            viewModel.setReportStats(
+                state.reportStats.copy(
+                    location = it
+                )
+            )
+        }) {
+            getLocation.value = false
+        }; return
     }
 
     if (state.errorMessage.isNotEmpty()) {
@@ -61,10 +76,12 @@ fun CreateReportView(
             .verticalScroll(rememberScrollState())
     ) {
 
-
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+            LAFHeader(title = "Create Report") {
+                navController.popBackStack()
+            }
 
             LAFFormField(
                 value = state.reportStats.title,
@@ -85,7 +102,15 @@ fun CreateReportView(
             )
         }
 
-        MyLocation()
+        Text(
+            text = "Location: ${state.reportStats.location}",
+            style = MaterialTheme.typography.h6
+        )
+        LAFLoadingButton(
+            onClick = { getLocation.value = true },
+            text = "Select Location",
+            loading = state.loading
+        )
 
         if (updateReport != null) {
             LAFLoadingButton(
