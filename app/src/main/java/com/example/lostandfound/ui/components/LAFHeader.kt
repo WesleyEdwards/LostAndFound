@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ColumnScope.LAFHeader(title: String, onBack: () -> Unit) {
+fun ColumnScope.LAFHeader(title: String, onBack: (() -> Unit)? = null) {
     Row(
         modifier = Modifier
             .padding(4.dp)
@@ -22,13 +22,17 @@ fun ColumnScope.LAFHeader(title: String, onBack: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Back button",
-            modifier = Modifier
-                .size(28.dp)
-                .clickable { onBack() }
-        )
+        if (onBack != null) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable { onBack() }
+            )
+        } else {
+            Spacer(modifier = Modifier.width(28.dp))
+        }
 
         Text(
             text = title,

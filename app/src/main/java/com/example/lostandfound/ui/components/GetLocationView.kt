@@ -29,6 +29,7 @@ fun GetLocationView(changeLocation: (newLocation: String) -> Unit, exitGetLocati
             .verticalScroll(rememberScrollState())
     ) {
         LAFHeader(title = "Get Location", onBack = { exitGetLocation() })
+
         DisposableEffect(true) {
             if (ActivityCompat.checkSelfPermission(
                     context,
@@ -61,5 +62,7 @@ fun GetLocationView(changeLocation: (newLocation: String) -> Unit, exitGetLocati
                 onDispose { }
             }
         }
+
+        
     }
 }

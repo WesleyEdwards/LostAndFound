@@ -32,7 +32,6 @@ fun CreateReportView(
     val scope = rememberCoroutineScope()
     val getLocation = remember { mutableStateOf(false) }
 
-
     GrantPermission()
 
     LaunchedEffect(state.creationSuccess) {
@@ -92,7 +91,6 @@ fun CreateReportView(
                 placeholder = "Dog"
             )
 
-
             LAFFormField(
                 value = state.reportStats.description ?: "",
                 onValueChange = { viewModel.setReportStats(state.reportStats.copy(description = it)) },
@@ -125,6 +123,5 @@ fun CreateReportView(
                 loading = state.loading
             )
         }
-
     }
 }
