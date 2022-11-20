@@ -2,8 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
-//    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-//    id 'com.google.secret_gradle_plugin' version '0.4.0'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
@@ -22,15 +20,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-//        Properties properties = new Properties()
-
-//        Properties properties = new Properties()
-//        properties.load(project.rootProject.file('local.properties').newDataInputStream())
-//        BuildConfigField "String", "MAPS_API_KEY", "\"${properties.getProperty('MAPS_API_KEY')}"
-//        properties.each { key, value ->
-//            buildConfigField 'String', key, "\"$value\""
-//        }
     }
 
     buildTypes {

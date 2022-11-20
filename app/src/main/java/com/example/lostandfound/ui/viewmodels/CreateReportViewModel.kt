@@ -12,7 +12,7 @@ import com.example.lostandfound.ui.repositories.ReportRepo
 class CreateReportScreenState {
 
     var reportStats: ReportStats by mutableStateOf(ReportStats())
-    var initialCharStats: ReportStats by mutableStateOf(ReportStats())
+    var initialStats: ReportStats by mutableStateOf(ReportStats())
 
     var loading by mutableStateOf(false)
     var creationSuccess by mutableStateOf(false)
@@ -25,12 +25,18 @@ class CreateReportViewModel(application: Application) : AndroidViewModel(applica
 
     fun setReport(report: Report) {
         state.reportStats = report.reportStats
-        state.initialCharStats = report.reportStats
+    }
+
+    fun isDirty(): Boolean {
+        return state.reportStats == state.initialStats ||
+                state.reportStats.title.isEmpty() ||
+                state.reportStats.description.isEmpty() ||
+                state.reportStats.latitude == 0.0 ||
+                state.reportStats.longitude == 0.0
     }
 
     fun setReportStats(stats: ReportStats) {
         state.reportStats = stats
-        state.initialCharStats = stats
     }
 
     suspend fun createReport() {

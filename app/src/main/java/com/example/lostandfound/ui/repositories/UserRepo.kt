@@ -34,7 +34,6 @@ object UserRepo {
     }
 
     fun isUserLoggedIn(): Boolean {
-        println("USER::: ${auth.currentUser}")
         return auth.currentUser != null
     }
 

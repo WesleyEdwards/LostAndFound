@@ -5,6 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,7 +50,8 @@ fun CreateReportView(
         GetLocationView(changeLocation = {
             viewModel.setReportStats(
                 state.reportStats.copy(
-                    location = it
+                    latitude = it.latitude,
+                    longitude = it.longitude
                 )
             )
         }) {
@@ -92,7 +94,7 @@ fun CreateReportView(
             )
 
             LAFFormField(
-                value = state.reportStats.description ?: "",
+                value = state.reportStats.description,
                 onValueChange = { viewModel.setReportStats(state.reportStats.copy(description = it)) },
                 label = "Description",
                 placeholder = "Very Kind and wouldn't hurt a soul",
@@ -100,15 +102,19 @@ fun CreateReportView(
             )
         }
 
-        Text(
-            text = "Location: ${state.reportStats.location}",
-            style = MaterialTheme.typography.h6
-        )
-        LAFLoadingButton(
-            onClick = { getLocation.value = true },
-            text = "Select Location",
-            loading = state.loading
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(.5f)
+                .align(Alignment.Start)
+        ) {
+            LAFLoadingButton(
+                onClick = { getLocation.value = true },
+                text = "Select Location",
+                showIcon = state.reportStats.latitude != 0.0
+            )
+        }
+
+        Divider(modifier = Modifier.padding(vertical = 16.dp))
 
         if (updateReport != null) {
             LAFLoadingButton(
@@ -120,7 +126,8 @@ fun CreateReportView(
             LAFLoadingButton(
                 onClick = { scope.launch { viewModel.createReport() } },
                 text = "Create",
-                loading = state.loading
+                loading = state.loading,
+                disabled = viewModel.isDirty()
             )
         }
     }

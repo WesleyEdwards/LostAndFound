@@ -56,7 +56,7 @@ fun MyReports(navController: NavController) {
                 .padding(16.dp)
         ) {
 
-            LAFHeader(title = "Home")
+            LAFHeader(title = "My Reports")
             if (state.reportList.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Text(

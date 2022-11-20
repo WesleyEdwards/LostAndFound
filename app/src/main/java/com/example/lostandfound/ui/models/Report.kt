@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.models
 
+import com.google.android.gms.maps.model.LatLng
+
 enum class ReportStatus {
     LOST,
     FOUND
@@ -14,7 +16,8 @@ data class Report(
 data class ReportStats(
     val title: String = "",
     val description: String = "",
-    val location: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
     val date: String = "",
     val image: String = "",
     val status: ReportStatus = ReportStatus.LOST
