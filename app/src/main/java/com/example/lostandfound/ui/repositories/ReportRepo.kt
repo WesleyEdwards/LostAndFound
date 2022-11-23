@@ -12,8 +12,7 @@ object ReportRepo {
 
     private var collectionPath = "reports"
 
-    private var reportsCache = mutableListOf<Report>()
-    private var cacheInitialized = false
+    private var reportsCache: MutableList<Report>? = null
 
     suspend fun createReport(createReport: ReportStats) {
         UserRepo.getUser().let {
@@ -22,32 +21,31 @@ object ReportRepo {
                 userId = it?.uid ?: "",
                 reportStats = createReport
             )
-            reportsCache.add(formattedReport)
+            reportsCache?.add(formattedReport)
             val doc = Firebase.firestore.collection(collectionPath).document()
             doc.set(formattedReport).await()
         }
     }
 
     suspend fun getMyReports(): List<Report> {
-        if (!cacheInitialized) {
+        if (reportsCache == null) {
             return Firebase.firestore.collection(collectionPath)
                 .whereEqualTo("userId", UserRepo.getUser()?.uid).get().await()
                 .toObjects<Report>()
         }
-        return reportsCache.filter { it.userId == UserRepo.getUser()?.uid }
+        return reportsCache?.filter { it.userId == UserRepo.getUser()?.uid } ?: mutableListOf()
     }
 
     suspend fun getAllReports(): List<Report> {
-        if (!cacheInitialized) {
+        if (reportsCache == null) {
             return Firebase.firestore.collection(collectionPath)
-                .get().await().toObjects()
+                .get().await().toObjects<Report>().apply { reportsCache = this.toMutableList() }
         }
-        cacheInitialized = true
-        return reportsCache
+        return reportsCache ?: mutableListOf()
     }
 
     suspend fun getReport(reportId: String): Report? {
-        return reportsCache.firstOrNull() { it._id == reportId }.let {
+        return reportsCache?.firstOrNull() { it._id == reportId }.let {
             Firebase.firestore.collection(collectionPath)
                 .get().await()
                 .toObjects<Report>()
@@ -56,30 +54,35 @@ object ReportRepo {
     }
 
     suspend fun deleteReport(reportId: String) {
-        reportsCache.removeAll { it._id == reportId }
-        val doc = Firebase.firestore.collection(collectionPath).whereEqualTo("_id", reportId)
-        doc.get().await().documents.firstOrNull()?.reference?.delete()?.await()
+        reportsCache?.removeAll { it._id == reportId }
+        Firebase.firestore.collection(collectionPath).whereEqualTo("_id", reportId).apply {
+            this.get().await().documents.firstOrNull()?.reference?.delete()?.await()
+        }
     }
 
     suspend fun updateReport(report: Report) {
-        Collections.replaceAll(
-            reportsCache,
-            reportsCache.first { it._id == report._id },
-            report
-        )
-        val doc = Firebase.firestore.collection(collectionPath).whereEqualTo("_id", report._id)
-        doc.get().await()
-            .documents.firstOrNull()?.reference?.update(
-                "reportStats",
-                report.reportStats
-            )?.await()
+        if (reportsCache != null) {
+            Collections.replaceAll(
+                reportsCache!!.toList(),
+                reportsCache?.first { it._id == report._id },
+                report
+            )
+        }
+        Firebase.firestore.collection(collectionPath).whereEqualTo("_id", report._id).apply {
+            this.get().await()
+                .documents.firstOrNull()?.reference?.update(
+                    "reportStats",
+                    report.reportStats
+                )?.await()
+        }
     }
+
     fun clearCache() {
-        reportsCache.clear()
-        cacheInitialized = false
+        reportsCache?.clear()
+        reportsCache = null
     }
 
     fun isMyReport(reportId: String): Boolean {
-        return reportsCache.firstOrNull() { it._id == reportId }?.userId == UserRepo.getUser()?.uid
+        return reportsCache?.firstOrNull { it._id == reportId }?.userId == UserRepo.getUser()?.uid
     }
 }

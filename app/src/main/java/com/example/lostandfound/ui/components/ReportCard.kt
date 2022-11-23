@@ -30,10 +30,11 @@ fun ReportCard(report: Report, onClick: () -> Unit) {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(8.dp)
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_zoom_in_24),
-                contentDescription = "Sword"
+                contentDescription = "Search"
             )
             Column() {
                 Text(text = report.reportStats.title)
