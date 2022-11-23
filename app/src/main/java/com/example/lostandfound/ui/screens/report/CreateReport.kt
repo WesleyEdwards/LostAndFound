@@ -80,9 +80,7 @@ fun CreateReportView(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            LAFHeader(title = "Create Report") {
-                navController.popBackStack()
-            }
+            LAFHeader(title = "Create Report", onBack = { navController.popBackStack() })
 
             LAFFormField(
                 value = state.reportStats.title,

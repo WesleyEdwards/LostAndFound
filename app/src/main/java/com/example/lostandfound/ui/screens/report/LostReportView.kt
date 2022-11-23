@@ -18,11 +18,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lostandfound.ui.components.LAFHeader
 import com.example.lostandfound.ui.components.LAFLoadingCircle
+import com.example.lostandfound.ui.navigation.Routes
+import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.viewmodels.LostReportViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun LostReportView(reportId: String, navController: NavHostController) {
-
     val viewModel: LostReportViewModel = viewModel()
     val state = viewModel.state
     val scope = rememberCoroutineScope()
@@ -30,6 +32,7 @@ fun LostReportView(reportId: String, navController: NavHostController) {
     LaunchedEffect(true) {
         viewModel.getReport(reportId)
     }
+    val mine = ReportRepo.isMyReport(reportId)
 
     LaunchedEffect(state.loading) {
         if (state.confirmDelete) {
@@ -48,31 +51,39 @@ fun LostReportView(reportId: String, navController: NavHostController) {
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
-
-        LAFHeader(state.report!!.reportStats.title) { navController.popBackStack() }
-
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            if (state.report != null) {
-                Text(
-                    text = state.report!!.reportStats.title,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(4.dp)
-                )
-                Text(
-                    text = state.report!!.reportStats.description,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(4.dp)
-                )
-            }
+        if (mine) {
+            LAFHeader(
+                state.report!!.reportStats.title,
+                onBack = { navController.popBackStack() },
+                onEdit = { navController.navigate(Routes.getReportEdit(reportId)) },
+                reportId,
+                onDelete = { scope.launch { viewModel.deleteReport(reportId) } }
+            )
+        } else {
+            LAFHeader(state.report!!.reportStats.title, onBack = { navController.popBackStack() })
         }
-        Button(
-            modifier = Modifier
-                .padding(16.dp, 32.dp)
-                .align(alignment = Alignment.CenterHorizontally),
-            onClick = { print("TODO") }) {
-            Text("Contact Victim")
+
+        state.report?.let {
+            Text(
+                text = it.reportStats.title,
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(4.dp)
+            )
+            Text(
+                text = it.reportStats.description,
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(4.dp)
+            )
+        }
+
+        if (!mine) {
+            Button(
+                modifier = Modifier
+                    .padding(16.dp, 32.dp)
+                    .align(alignment = Alignment.CenterHorizontally),
+                onClick = { print("TODO") }) {
+                Text("Contact Victim")
+            }
         }
     }
 }

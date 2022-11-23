@@ -14,8 +14,8 @@ class LostReportScreenState() {
     var _report by mutableStateOf<Report?>(null)
     val report: Report? get() = _report
 
-    var menuExpanded by mutableStateOf(false)
-    var deleteDialogue by mutableStateOf(false)
+    //    var menuExpanded by mutableStateOf(false)
+//    var deleteDialogue by mutableStateOf(false)
     var confirmDelete by mutableStateOf(false)
     var myReport by mutableStateOf(false)
 

@@ -9,8 +9,8 @@ fun LAFDeleteDialogue(
     open: Boolean,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
-    title: String = "Delete Character",
-    confirmationText: String = "Are you sure you want to delete this character?"
+    title: String = "Delete Report",
+    confirmationText: String = "Are you sure you want to delete this report?"
 ) {
     if (!open) return
     AlertDialog(
