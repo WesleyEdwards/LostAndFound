@@ -28,7 +28,6 @@ object ReportRepo {
     }
 
     suspend fun getMyReports(): List<Report> {
-        reportsCache?.forEach { println(it) }
         if (reportsCache == null) {
             return Firebase.firestore.collection(collectionPath)
                 .whereEqualTo("userId", UserRepo.getUser()?.uid).get().await()
@@ -38,7 +37,6 @@ object ReportRepo {
     }
 
     suspend fun getAllReports(): List<Report> {
-        reportsCache?.forEach { println(it._id) }
         if (reportsCache == null) {
             return Firebase.firestore.collection(collectionPath)
                 .get().await().toObjects<Report>().apply { reportsCache = this.toMutableList() }

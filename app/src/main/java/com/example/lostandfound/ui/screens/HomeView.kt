@@ -31,7 +31,6 @@ fun HomeView(navController: NavController) {
     val state = viewModel.state
 
     LaunchedEffect(true) {
-        println("HomeView LaunchedEffect")
         viewModel.getAllReports()
     }
 

@@ -1,7 +1,5 @@
 package com.example.lostandfound.ui.models
 
-import com.google.android.gms.maps.model.LatLng
-
 enum class ReportStatus {
     LOST,
     FOUND

@@ -33,8 +33,6 @@ fun CreateReportView(
     val scope = rememberCoroutineScope()
     val getLocation = remember { mutableStateOf(false) }
 
-    GrantPermission()
-
     LaunchedEffect(state.creationSuccess) {
         if (state.creationSuccess) {
             navController.navigate(GraphRoutes.Auth)
