@@ -3,6 +3,9 @@ package com.example.lostandfound.ui.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
@@ -15,26 +18,12 @@ import com.google.maps.android.compose.rememberCameraPositionState
 @Composable
 fun DisplayLocation(location: LatLng) {
 
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 10f)
-    }
+    val displayLocation: MutableState<LatLng> = remember { mutableStateOf(location) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Text(text = "General Location")
-            GoogleMap(
-                modifier = Modifier.fillMaxSize(),
-                cameraPositionState = cameraPositionState
-            ) {
-                Marker(
-                    state = MarkerState(position = location),
-                    title = "Location"
-                )
-            }
-
-        }
+        MapsView(currentLocation = displayLocation)
     }
 }

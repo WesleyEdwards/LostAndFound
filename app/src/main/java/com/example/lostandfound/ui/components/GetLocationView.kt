@@ -5,8 +5,10 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -16,10 +18,7 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.*
 
 @Composable
 fun GetLocationView(changeLocation: (newLocation: LatLng) -> Unit, exitGetLocation: () -> Unit) {
@@ -34,24 +33,17 @@ fun GetLocationView(changeLocation: (newLocation: LatLng) -> Unit, exitGetLocati
     ) {
         LAFHeader(title = "Location", onBack = { exitGetLocation() })
 
-        GetMyLocation { currentLocation.value = it }
 
         if (currentLocation.value.latitude == 0.0 || currentLocation.value.longitude == 0.0) {
+            GetMyLocation { currentLocation.value = it }
             LAFLoadingCircle(); return@Column
         }
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(currentLocation.value, 10f)
-        }
+
+        MapsView(currentLocation, changeLocation)
+
         changeLocation(currentLocation.value)
-        GoogleMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
-        ) {
-            Marker(
-                state = MarkerState(position = currentLocation.value),
-                title = "My Location",
-            )
-        }
+
+
     }
 }
 
