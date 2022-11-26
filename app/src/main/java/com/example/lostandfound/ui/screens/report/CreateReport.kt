@@ -100,12 +100,12 @@ fun CreateReportView(
 
         Box(
             modifier = Modifier
-                .fillMaxWidth(.5f)
+                .fillMaxWidth(.6f)
                 .align(Alignment.Start)
         ) {
             LAFLoadingButton(
                 onClick = { getLocation.value = true },
-                text = "Select Location",
+                text = "General Location",
                 showIcon = state.reportStats.latitude != 0.0
             )
         }
