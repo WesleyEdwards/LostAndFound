@@ -16,8 +16,10 @@ fun GrantPermission() {
     }
     LaunchedEffect(true) {
         launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        launcher.launch(Manifest.permission.CAMERA)
     }
     if (!permissionGranted.value) {
         GivePermission(); return
     }
+
 }

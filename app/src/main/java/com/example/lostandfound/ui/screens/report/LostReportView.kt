@@ -1,9 +1,11 @@
 package com.example.lostandfound.ui.screens.report
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,8 +51,7 @@ fun LostReportView(reportId: String, navController: NavHostController) {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(.7f)
+            .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.SpaceBetween
@@ -80,6 +82,26 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 state.report!!.reportStats.longitude
             )
         )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            if (state.loadingImage) {
+                CircularProgressIndicator()
+            } else {
+                if (state.bitmap != null) {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        bitmap = state.bitmap!!.asImageBitmap(),
+                        contentDescription = "Image"
+                    )
+                }
+            }
+        }
+
         if (mine) {
             Button(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
