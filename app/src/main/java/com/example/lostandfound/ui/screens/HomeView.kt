@@ -10,16 +10,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.lostandfound.ui.components.LAFHeader
 import com.example.lostandfound.ui.components.LAFLoadingCircle
-import com.example.lostandfound.ui.components.LAFTitleBar
 import com.example.lostandfound.ui.components.ReportCard
 import com.example.lostandfound.ui.navigation.Routes
+import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.viewmodels.HomeViewModel
 
 @Composable
@@ -29,7 +31,6 @@ fun HomeView(navController: NavController) {
     val state = viewModel.state
 
     LaunchedEffect(true) {
-        println("HomeView LaunchedEffect")
         viewModel.getAllReports()
     }
 
@@ -37,13 +38,14 @@ fun HomeView(navController: NavController) {
         LAFLoadingCircle()
         return
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        LAFTitleBar(title = "Lost Reports")
+
+        LAFHeader(title = "Home")
+
         if (state.reportList.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Text(

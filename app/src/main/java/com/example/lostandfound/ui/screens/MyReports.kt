@@ -21,8 +21,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.lostandfound.ui.components.LAFHeader
 import com.example.lostandfound.ui.components.LAFLoadingCircle
-import com.example.lostandfound.ui.components.LAFTitleBar
 import com.example.lostandfound.ui.components.ReportCard
 import com.example.lostandfound.ui.navigation.Routes
 import com.example.lostandfound.ui.viewmodels.MyReportsViewModel
@@ -37,15 +37,15 @@ fun MyReports(navController: NavController) {
         viewModel.getReport()
     }
 
-    Scaffold(floatingActionButton = {
-        FloatingActionButton(
-            onClick = {
-                navController.navigate(Routes.CreateLostReport)
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Routes.CreateLostReport) }
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Report")
             }
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add Report")
         }
-    }) {
+    ) {
         if (state.loading) {
             LAFLoadingCircle()
             return@Scaffold
@@ -56,7 +56,7 @@ fun MyReports(navController: NavController) {
                 .padding(16.dp)
         ) {
 
-            LAFTitleBar(title = "My Lost Reports")
+            LAFHeader(title = "My Reports")
             if (state.reportList.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Text(
@@ -72,7 +72,7 @@ fun MyReports(navController: NavController) {
             LazyColumn {
                 items(state.reportList, key = { it._id }) { report ->
                     ReportCard(report = report, onClick = {
-                        navController.navigate(Routes.getMyReportView(report._id))
+                        navController.navigate(Routes.getLostReportView(report._id))
                     })
                 }
             }

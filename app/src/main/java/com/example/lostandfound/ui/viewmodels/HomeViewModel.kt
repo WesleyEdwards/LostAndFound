@@ -26,7 +26,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         state.errorMessage = ""
         try {
             val reports = ReportRepo.getAllReports()
-            println("reports: $reports")
             state._reportList.clear()
             state._reportList.addAll(reports)
         } catch (e: Exception) {
