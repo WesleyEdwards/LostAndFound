@@ -34,15 +34,14 @@ class LostReportViewModel(application: Application) : AndroidViewModel(applicati
     var state = LostReportScreenState()
 
 
-    private fun fetchImage(imageId: String? = null) {
-        imageId?.let {
-            state.loadingImage = true
-            ImagesRepo.getImagesRef(imageId = it, state.file)
-                .addOnSuccessListener {
-                    state.bitmap = BitmapFactory.decodeFile(state.file.absolutePath)
-                    state.loadingImage = false
-                }
-        }
+    private fun fetchImage(imageId: String) {
+        if (imageId == "") return
+        state.loadingImage = true
+        ImagesRepo.getImagesRef(imageId, state.file)
+            .addOnSuccessListener {
+                state.bitmap = BitmapFactory.decodeFile(state.file.absolutePath)
+                state.loadingImage = false
+            }
     }
 
     suspend fun getReport(reportId: String) {
@@ -52,9 +51,12 @@ class LostReportViewModel(application: Application) : AndroidViewModel(applicati
         state._report = null
         try {
             val report = ReportRepo.getReport(reportId)
-            fetchImage(report?.reportStats?.image)
+            report?.reportStats?.image?.let {
+                fetchImage(it)
+            }
             state._report = report
             state.myReport = report?.userId == UserRepo.getUser()?.uid
+
         } catch (e: Exception) {
             state.errorMessage = e.message ?: "Unknown error"
         } finally {

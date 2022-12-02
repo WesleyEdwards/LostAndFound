@@ -5,7 +5,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.example.lostandfound.ui.screens.*
+import com.example.lostandfound.ui.screens.Conversations
+import com.example.lostandfound.ui.screens.HomeView
+import com.example.lostandfound.ui.screens.MyReports
+import com.example.lostandfound.ui.screens.ProfileView
 import com.example.lostandfound.ui.screens.report.*
 import com.example.lostandfound.ui.screens.unauth.CreateAccountView
 import com.example.lostandfound.ui.screens.unauth.SignInView
@@ -37,13 +40,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
                 navController,
             )
         }
-        composable(Routes.MyReportView) {
-            MyReportView(
-                it.arguments?.getString("reportId") ?: "",
-                navController,
-            )
-        }
-
         composable(Routes.LostReportEdit) {
             EditLostReport(
                 it.arguments?.getString("reportId") ?: "",

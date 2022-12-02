@@ -90,7 +90,7 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 .align(Alignment.CenterHorizontally)
         ) {
             if (state.loadingImage) {
-                CircularProgressIndicator()
+                LAFLoadingCircle()
             } else {
                 if (state.bitmap != null) {
                     Image(
@@ -116,7 +116,6 @@ fun LostReportView(reportId: String, navController: NavHostController) {
             ) {
                 Text("Contact Victim")
             }
-
         }
     }
 }

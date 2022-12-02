@@ -24,6 +24,7 @@ class CreateReportScreenState {
     var loading by mutableStateOf(false)
     var loadingImage by mutableStateOf(false)
     var creationSuccess by mutableStateOf(false)
+    var getLocation by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
 
     var file: File = File.createTempFile("temp", "jpg")
@@ -68,7 +69,6 @@ class CreateReportViewModel(application: Application) : AndroidViewModel(applica
     }
 
     private fun fetchImage() {
-        println("getting Image ${state.reportStats.image}")
         state.loadingImage = true
         ImagesRepo.getImagesRef(imageId = state.reportStats.image, state.file)
             .addOnSuccessListener {

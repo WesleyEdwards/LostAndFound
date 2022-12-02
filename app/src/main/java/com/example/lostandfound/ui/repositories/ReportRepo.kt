@@ -45,7 +45,7 @@ object ReportRepo {
     }
 
     suspend fun getReport(reportId: String): Report? {
-        return reportsCache?.firstOrNull() { it._id == reportId }.let {
+        return reportsCache?.find { it._id == reportId }.let {
             Firebase.firestore.collection(collectionPath)
                 .get().await()
                 .toObjects<Report>()

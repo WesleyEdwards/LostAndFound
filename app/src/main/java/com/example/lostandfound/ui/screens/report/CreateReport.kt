@@ -15,10 +15,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.lostandfound.ui.components.GetLocationView
-import com.example.lostandfound.ui.components.LAFFormField
-import com.example.lostandfound.ui.components.LAFHeader
-import com.example.lostandfound.ui.components.LAFLoadingButton
+import com.example.lostandfound.ui.components.*
 import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.navigation.GraphRoutes
@@ -36,16 +33,15 @@ fun CreateReportView(
     val viewModel: CreateReportViewModel = viewModel()
     val state = viewModel.state
     val scope = rememberCoroutineScope()
-    val getLocation = remember { mutableStateOf(false) }
-
 
     val pickMedia =
-        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
             if (uri != null) {
                 viewModel.setReportStats(state.reportStats, uri)
             }
         }
-
 
     LaunchedEffect(state.creationSuccess) {
         if (state.creationSuccess) {
@@ -58,7 +54,7 @@ fun CreateReportView(
         }
     }
 
-    if (getLocation.value) {
+    if (state.getLocation) {
         GetLocationView(changeLocation = {
             viewModel.setReportStats(
                 state.reportStats.copy(
@@ -67,7 +63,7 @@ fun CreateReportView(
                 )
             )
         }) {
-            getLocation.value = false
+            state.getLocation = false
         }; return
     }
 
@@ -128,7 +124,7 @@ fun CreateReportView(
                 .align(Alignment.Start)
         ) {
             LAFLoadingButton(
-                onClick = { getLocation.value = true },
+                onClick = { state.getLocation = true },
                 text = "General Location",
                 showIcon = state.reportStats.latitude != 0.0
             )
@@ -140,7 +136,11 @@ fun CreateReportView(
         ) {
             LAFLoadingButton(
                 onClick = {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    pickMedia.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                    )
                 },
                 text = "Upload Image",
                 showIcon = false
@@ -154,7 +154,7 @@ fun CreateReportView(
                 .align(Alignment.CenterHorizontally)
         ) {
             if (state.loadingImage) {
-                CircularProgressIndicator()
+                LAFLoadingCircle()
             } else {
                 if (state.bitmap != null) {
                     Image(
