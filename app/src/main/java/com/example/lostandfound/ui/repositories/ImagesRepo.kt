@@ -1,14 +1,11 @@
 package com.example.lostandfound.ui.repositories
 
-import android.graphics.Bitmap
 import android.net.Uri
-import android.provider.MediaStore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
 

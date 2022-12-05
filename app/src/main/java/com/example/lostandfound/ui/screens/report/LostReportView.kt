@@ -114,7 +114,7 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                 onClick = { print("TODO") }
             ) {
-                Text("Contact Victim")
+                Text("Contact")
             }
         }
     }

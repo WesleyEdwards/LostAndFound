@@ -43,9 +43,7 @@ class CreateReportViewModel(application: Application) : AndroidViewModel(applica
     fun isDirty(): Boolean {
         return state.reportStats == state.initialStats ||
                 state.reportStats.title.isEmpty() ||
-                state.reportStats.description.isEmpty() ||
-                state.reportStats.latitude == 0.0 ||
-                state.reportStats.longitude == 0.0
+                state.reportStats.description.isEmpty()
     }
 
     fun setReportStats(stats: ReportStats, image: Uri? = null) {
