@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lostandfound.ui.components.DisplayLocation
+import com.example.lostandfound.ui.components.LAFAd
 import com.example.lostandfound.ui.components.LAFHeader
 import com.example.lostandfound.ui.components.LAFLoadingCircle
 import com.example.lostandfound.ui.navigation.Routes
@@ -101,6 +101,8 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 }
             }
         }
+
+        LAFAd()
 
         if (mine) {
             Button(
