@@ -9,8 +9,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -21,8 +26,8 @@ import com.example.lostandfound.ui.components.*
 import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.navigation.GraphRoutes
-import com.example.lostandfound.ui.viewmodels.CreateReportViewModel
 import com.example.lostandfound.ui.viewmodels.EditReportViewViewModel
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -57,16 +62,19 @@ fun EditReportView(
     }
 
     if (state.getLocation) {
-        GetLocationView(changeLocation = {
-            viewModel.setReportStats(
-                state.reportStats.copy(
-                    latitude = it.latitude,
-                    longitude = it.longitude
+        GetLocationView(
+            changeLocation = {
+                viewModel.setReportStats(
+                    state.reportStats.copy(
+                        latitude = it.latitude,
+                        longitude = it.longitude
+                    )
                 )
-            )
-        }) {
-            state.getLocation = false
-        }; return
+            },
+            latLng = LatLng(state.reportStats.latitude, state.reportStats.longitude),
+            exitGetLocation = {
+                state.getLocation = false
+            }); return
     }
 
     if (state.errorMessage.isNotEmpty()) {

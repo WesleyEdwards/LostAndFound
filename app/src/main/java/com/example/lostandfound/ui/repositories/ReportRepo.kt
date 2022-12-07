@@ -77,6 +77,12 @@ object ReportRepo {
                     report.reportStats
                 )?.await()
         }
+        return pullAndRecache()
+    }
+
+    private suspend fun pullAndRecache() {
+        return Firebase.firestore.collection(collectionPath)
+            .get().await().toObjects<Report>().toMutableList().let { reportsCache = it }
     }
 
     fun clearCache() {

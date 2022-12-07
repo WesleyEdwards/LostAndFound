@@ -1,6 +1,5 @@
 package com.example.lostandfound.ui.screens.report
 
-import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,8 +7,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -17,11 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lostandfound.ui.components.*
-import com.example.lostandfound.ui.models.Report
-import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.navigation.GraphRoutes
 import com.example.lostandfound.ui.viewmodels.CreateReportViewModel
-import kotlinx.coroutines.Job
+import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.launch
 
 @Composable
@@ -54,9 +56,9 @@ fun CreateReportView(navController: NavHostController) {
                     longitude = it.longitude
                 )
             )
-        }) {
+        }, exitGetLocation = {
             state.getLocation = false
-        }; return
+        }, latLng = LatLng(0.0, 0.0)); return
     }
 
     if (state.errorMessage.isNotEmpty()) {
