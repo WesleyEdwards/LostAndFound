@@ -19,6 +19,8 @@ object ReportRepo {
             val formattedReport = Report(
                 _id = UUID.randomUUID().toString(),
                 userId = it?.uid ?: "",
+                userEmail = it?.email ?: "",
+                userName = it?.displayName ?: "",
                 reportStats = createReport
             )
             reportsCache?.add(formattedReport)

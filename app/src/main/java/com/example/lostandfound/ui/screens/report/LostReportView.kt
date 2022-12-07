@@ -4,23 +4,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.lostandfound.ui.components.DisplayLocation
-import com.example.lostandfound.ui.components.LAFAd
-import com.example.lostandfound.ui.components.LAFHeader
-import com.example.lostandfound.ui.components.LAFLoadingCircle
+import com.example.lostandfound.ui.components.*
 import com.example.lostandfound.ui.navigation.Routes
 import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.viewmodels.LostReportViewModel
@@ -43,6 +39,26 @@ fun LostReportView(reportId: String, navController: NavHostController) {
             navController.popBackStack()
             return@LaunchedEffect
         }
+    }
+
+    if (state.modal) {
+        AlertDialog(
+            onDismissRequest = { state.modal = false },
+            title = {
+                Text("Found")
+            },
+            text = {
+                Text(
+                    fontStyle = Italic,
+                    text = "If found, please contact: ${state.report?.userName} ${state.report?.userEmail}"
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { state.modal = false }) {
+                    Text("OK")
+                }
+            },
+        )
     }
 
     if (state.report == null) {
@@ -76,17 +92,19 @@ fun LostReportView(reportId: String, navController: NavHostController) {
             )
         }
 
-        DisplayLocation(
-            LatLng(
-                state.report!!.reportStats.latitude,
-                state.report!!.reportStats.longitude
+        if (state.report!!.reportStats.longitude != 0.0) {
+            DisplayLocation(
+                LatLng(
+                    state.report!!.reportStats.latitude,
+                    state.report!!.reportStats.longitude
+                )
             )
-        )
+        }
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(250.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             if (state.loadingImage) {
@@ -114,9 +132,9 @@ fun LostReportView(reportId: String, navController: NavHostController) {
         } else {
             Button(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                onClick = { print("TODO") }
+                onClick = { state.modal = true }
             ) {
-                Text("Contact")
+                Text("Found")
             }
         }
     }

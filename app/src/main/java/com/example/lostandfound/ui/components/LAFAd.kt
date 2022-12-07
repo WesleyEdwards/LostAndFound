@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.*
 
+@SuppressLint("MissingPermission")
 @Composable
 fun LAFAd() {
     val isInEditMode = LocalInspectionMode.current

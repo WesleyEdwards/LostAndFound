@@ -8,7 +8,9 @@ enum class ReportStatus {
 data class Report(
     val _id: String = "",
     val reportStats: ReportStats = ReportStats(),
-    val userId: String = ""
+    val userId: String = "",
+    val userName: String = "",
+    val userEmail: String = "",
 )
 
 data class ReportStats(

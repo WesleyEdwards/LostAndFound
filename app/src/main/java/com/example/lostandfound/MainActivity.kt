@@ -9,7 +9,6 @@ import com.google.android.gms.ads.MobileAds
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        MobileAds.initialize(this) {}
         setContent {
             App()
         }

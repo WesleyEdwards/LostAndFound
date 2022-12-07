@@ -1,5 +1,6 @@
 package com.example.lostandfound.ui.screens.report
 
+
 import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -21,13 +22,19 @@ import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.navigation.GraphRoutes
 import com.example.lostandfound.ui.viewmodels.CreateReportViewModel
+import com.example.lostandfound.ui.viewmodels.EditReportViewViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
-fun CreateReportView(navController: NavHostController) {
+fun EditReportView(
+    navController: NavHostController,
+    initialReport: Report,
+    imageBitmap: Bitmap? = null,
+    updateReport: ((ReportStats) -> Job)
+) {
 
-    val viewModel: CreateReportViewModel = viewModel()
+    val viewModel: EditReportViewViewModel = viewModel()
     val state = viewModel.state
     val scope = rememberCoroutineScope()
 
@@ -44,6 +51,9 @@ fun CreateReportView(navController: NavHostController) {
         if (state.creationSuccess) {
             navController.navigate(GraphRoutes.Auth)
         }
+    }
+    LaunchedEffect(true) {
+        viewModel.setReport(initialReport, imageBitmap)
     }
 
     if (state.getLocation) {
@@ -80,7 +90,7 @@ fun CreateReportView(navController: NavHostController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            LAFHeader(title = "Create Report", onBack = { navController.popBackStack() })
+            LAFHeader(title = "Edit Report", onBack = { navController.popBackStack() })
 
             LAFFormField(
                 value = state.reportStats.title,
@@ -164,12 +174,11 @@ fun CreateReportView(navController: NavHostController) {
 
         Divider(modifier = Modifier.padding(vertical = 16.dp))
 
-
         LAFLoadingButton(
-            onClick = { scope.launch { viewModel.createReport() } },
-            text = "Create",
+            onClick = { scope.launch { updateReport(state.reportStats) } },
+            text = "Update",
             loading = state.loading,
-            disabled = viewModel.isDirty(),
+            disabled = viewModel.isDirty()
         )
     }
 }

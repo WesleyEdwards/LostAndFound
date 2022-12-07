@@ -21,6 +21,8 @@ class LostReportScreenState() {
     var confirmDelete by mutableStateOf(false)
     var myReport by mutableStateOf(false)
     var loadingImage by mutableStateOf(false)
+    var modal by mutableStateOf(false)
+
 
     var loading by mutableStateOf(false)
     var errorMessage by mutableStateOf("")

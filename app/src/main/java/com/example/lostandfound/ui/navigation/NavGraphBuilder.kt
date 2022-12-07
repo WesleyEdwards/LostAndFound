@@ -41,7 +41,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
             )
         }
         composable(Routes.LostReportEdit) {
-            EditLostReport(
+            EditReport(
                 it.arguments?.getString("reportId") ?: "",
                 navController
             )
