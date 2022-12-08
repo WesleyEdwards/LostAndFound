@@ -20,7 +20,6 @@ fun MapsView(
         position = CameraPosition.fromLatLngZoom(currentLocation.value, 10f)
     }
 
-
     GoogleMap(
         modifier = Modifier.fillMaxSize(),
         properties = properties,

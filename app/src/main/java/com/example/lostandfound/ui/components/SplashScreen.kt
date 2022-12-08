@@ -16,7 +16,6 @@ fun SplashScreen() {
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-
     ) {
         Text(text = "Lost and Found", style = MaterialTheme.typography.h4)
     }

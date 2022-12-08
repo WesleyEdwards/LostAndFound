@@ -9,7 +9,9 @@ import com.example.lostandfound.ui.screens.Conversations
 import com.example.lostandfound.ui.screens.HomeView
 import com.example.lostandfound.ui.screens.MyReports
 import com.example.lostandfound.ui.screens.ProfileView
-import com.example.lostandfound.ui.screens.report.*
+import com.example.lostandfound.ui.screens.report.CreateReportView
+import com.example.lostandfound.ui.screens.report.EditReport
+import com.example.lostandfound.ui.screens.report.LostReportView
 import com.example.lostandfound.ui.screens.unauth.CreateAccountView
 import com.example.lostandfound.ui.screens.unauth.SignInView
 

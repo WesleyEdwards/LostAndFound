@@ -23,7 +23,6 @@ fun GetLocationView(
     exitGetLocation: () -> Unit,
     latLng: LatLng = LatLng(0.0, 0.0)
 ) {
-
     val currentLocation = remember { mutableStateOf(latLng) }
 
     Column(
@@ -34,16 +33,13 @@ fun GetLocationView(
     ) {
         LAFHeader(title = "Location", onBack = { exitGetLocation() })
 
-
         if (currentLocation.value.latitude == 0.0 || currentLocation.value.longitude == 0.0) {
             GetMyLocation { currentLocation.value = it }
             LAFLoadingCircle(); return@Column
         }
 
         MapsView(currentLocation, changeLocation)
-
         changeLocation(currentLocation.value)
-
 
     }
 }
@@ -59,7 +55,6 @@ fun GetMyLocation(setLocation: (location: LatLng) -> Unit) {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            //request location
             val client = LocationServices.getFusedLocationProviderClient(context)
 
             val locationCallback = object : LocationCallback() {
@@ -77,9 +72,8 @@ fun GetMyLocation(setLocation: (location: LatLng) -> Unit) {
                 locationCallback,
                 Looper.getMainLooper()
             )
-            onDispose { // clean up event listener
+            onDispose {
                 client.removeLocationUpdates(locationCallback)
-
             }
         } else {
             onDispose { }

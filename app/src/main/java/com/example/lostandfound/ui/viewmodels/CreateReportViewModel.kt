@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.repositories.ImagesRepo
 import com.example.lostandfound.ui.repositories.ReportRepo
@@ -34,7 +33,6 @@ class CreateReportScreenState {
 
 class CreateReportViewModel(application: Application) : AndroidViewModel(application) {
     var state = CreateReportScreenState()
-
 
 
     fun isDirty(): Boolean {

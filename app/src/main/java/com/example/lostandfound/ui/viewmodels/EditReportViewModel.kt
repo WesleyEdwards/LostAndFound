@@ -4,7 +4,6 @@ package com.example.lostandfound.ui.viewmodels
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,8 +12,6 @@ import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.repositories.ImagesRepo
 import com.example.lostandfound.ui.repositories.ReportRepo
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
 import java.io.File
 
 class EditReportScreenState {
