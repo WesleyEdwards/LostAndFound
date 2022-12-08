@@ -21,7 +21,9 @@ fun LAFHeader(
     onBack: (() -> Unit)? = null,
     onEdit: (() -> Unit)? = null,
     reportId: String? = null,
-    onDelete: (() -> Unit)? = null
+    onDelete: (() -> Unit)? = null,
+    onMarkAsFound: (() -> Unit)? = null,
+    markAsFound: Boolean = false,
 ) {
     val menuExpanded = remember { mutableStateOf(false) }
     val deleteDialogue = remember { mutableStateOf(false) }
@@ -87,6 +89,18 @@ fun LAFHeader(
                         menuExpanded.value = false
                     }) {
                         Text("Delete")
+                    }
+                    if (markAsFound) {
+                        DropdownMenuItem(onClick = {
+                            scope.launch {
+                                if (onMarkAsFound != null) {
+                                    onMarkAsFound()
+                                }
+                            }
+                            menuExpanded.value = false
+                        }) {
+                            Text("Mark as found")
+                        }
                     }
                 }
             }

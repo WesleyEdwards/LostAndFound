@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lostandfound.ui.components.*
+import com.example.lostandfound.ui.models.ReportStatus
 import com.example.lostandfound.ui.navigation.Routes
 import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.viewmodels.LostReportViewModel
@@ -41,9 +42,9 @@ fun LostReportView(reportId: String, navController: NavHostController) {
         }
     }
 
-    if (state.modal) {
+    if (state.contactModal) {
         AlertDialog(
-            onDismissRequest = { state.modal = false },
+            onDismissRequest = { state.contactModal = false },
             title = {
                 Text("Found")
             },
@@ -54,8 +55,34 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 )
             },
             confirmButton = {
-                TextButton(onClick = { state.modal = false }) {
+                TextButton(onClick = { state.contactModal = false }) {
                     Text("OK")
+                }
+            },
+        )
+    }
+    if (state.foundModal) {
+        AlertDialog(
+            onDismissRequest = { state.foundModal = false },
+            title = {
+                Text("Found")
+            },
+            text = {
+                Text(
+                    fontStyle = Italic,
+                    text = "Mark as found?"
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    scope.launch { viewModel.markAsFound(); navController.popBackStack() }
+                }) {
+                    Text("Found")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { state.foundModal = false }) {
+                    Text("Cancel")
                 }
             },
         )
@@ -78,7 +105,9 @@ fun LostReportView(reportId: String, navController: NavHostController) {
                 onBack = { navController.popBackStack() },
                 onEdit = { navController.navigate(Routes.getReportEdit(reportId)) },
                 reportId,
-                onDelete = { scope.launch { viewModel.deleteReport(reportId) } }
+                onDelete = { scope.launch { viewModel.deleteReport(reportId) } },
+                onMarkAsFound = { state.foundModal = true },
+                markAsFound = state.report!!.reportStats.status == ReportStatus.LOST
             )
         } else {
             LAFHeader(state.report!!.reportStats.title, onBack = { navController.popBackStack() })
@@ -86,6 +115,7 @@ fun LostReportView(reportId: String, navController: NavHostController) {
 
         state.report?.let {
             Text(
+                modifier = Modifier.padding(vertical = 16.dp),
                 text = it.reportStats.description,
                 style = MaterialTheme.typography.body1,
                 fontStyle = Italic,
@@ -104,7 +134,8 @@ fun LostReportView(reportId: String, navController: NavHostController) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(300.dp)
+                .padding(vertical = 16.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             if (state.loadingImage) {
@@ -122,20 +153,36 @@ fun LostReportView(reportId: String, navController: NavHostController) {
 
         LAFAd()
 
-        if (mine) {
+        if (!mine) {
             Button(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                onClick = { navController.navigate(Routes.getReportEdit(reportId)) }
-            ) {
-                Text("Edit")
-            }
-        } else {
-            Button(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                onClick = { state.modal = true }
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .padding(vertical = 16.dp),
+                onClick = { state.contactModal = true }
             ) {
                 Text("Found")
             }
+        }
+
+        if (mine && state.report!!.reportStats.status == ReportStatus.LOST) {
+            Button(
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .padding(vertical = 16.dp),
+                onClick = { state.foundModal = true },
+            ) {
+                Text("Mark as found")
+            }
+        }
+
+        if (mine && state.report!!.reportStats.status == ReportStatus.FOUND) {
+            Text(
+                text = "Status: ${state.report!!.reportStats.status}",
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp),
+                color = Color.Gray
+            )
         }
     }
 }

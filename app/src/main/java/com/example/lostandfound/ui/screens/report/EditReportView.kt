@@ -184,7 +184,7 @@ fun EditReportView(
 
         LAFLoadingButton(
             onClick = { scope.launch { updateReport(state.reportStats) } },
-            text = "Update",
+            text = "Save",
             loading = state.loading,
             disabled = viewModel.isDirty()
         )

@@ -3,11 +3,10 @@ package com.example.lostandfound.ui.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.lostandfound.R
 import com.example.lostandfound.ui.models.Report
+import com.example.lostandfound.ui.models.ReportStatus
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -31,20 +31,35 @@ fun ReportCard(report: Report, onClick: () -> Unit) {
         ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(8.dp)
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_zoom_in_24),
-                contentDescription = "Search"
-            )
-            Column(modifier = Modifier.padding(8.dp)) {
-                Text(text = report.reportStats.title)
-                Text(
-                    text = report.reportStats.description,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Gray,
-                    style = MaterialTheme.typography.caption
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(8.dp),
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_baseline_zoom_in_24),
+                    contentDescription = "Search"
+                )
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Text(text = report.reportStats.title)
+                    Text(
+                        text = report.reportStats.description,
+                        overflow = TextOverflow.Ellipsis,
+                        color = Color.Gray,
+                        style = MaterialTheme.typography.caption
+                    )
+                }
+            }
+            if (report.reportStats.status == ReportStatus.FOUND) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = "Found",
+                    tint = MaterialTheme.colors.primary,
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .size(48.dp)
                 )
             }
         }

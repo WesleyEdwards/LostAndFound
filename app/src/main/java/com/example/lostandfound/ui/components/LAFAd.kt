@@ -41,7 +41,7 @@ fun LAFAd() {
             factory = { context ->
                 AdView(context).apply {
                     setAdSize(AdSize.BANNER)
-                    adUnitId = "ca-app-pub-5839863331906214/1943777729"
+                    adUnitId = "ca-app-pub-3940256099942544/6300978111"
                     loadAd(AdRequest.Builder().build())
                     adListener = object : AdListener() {
                         override fun onAdLoaded() {
