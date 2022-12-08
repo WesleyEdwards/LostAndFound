@@ -5,10 +5,8 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -16,14 +14,17 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
 @Composable
-fun GetLocationView(changeLocation: (newLocation: LatLng) -> Unit, exitGetLocation: () -> Unit) {
+fun GetLocationView(
+    changeLocation: (newLocation: LatLng) -> Unit,
+    exitGetLocation: () -> Unit,
+    latLng: LatLng = LatLng(0.0, 0.0)
+) {
 
-    val currentLocation = remember { mutableStateOf(LatLng(0.0, 0.0)) }
+    val currentLocation = remember { mutableStateOf(latLng) }
 
     Column(
         modifier = Modifier

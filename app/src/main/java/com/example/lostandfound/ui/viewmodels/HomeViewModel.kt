@@ -25,7 +25,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         state.loading = true
         state.errorMessage = ""
         try {
-            val reports = ReportRepo.getAllReports()
+            val reports = ReportRepo.getAllActiveReports()
             state._reportList.clear()
             state._reportList.addAll(reports)
         } catch (e: Exception) {

@@ -1,5 +1,7 @@
 package com.example.lostandfound.ui.screens.report
 
+
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,15 +23,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lostandfound.ui.components.*
+import com.example.lostandfound.ui.models.Report
+import com.example.lostandfound.ui.models.ReportStats
 import com.example.lostandfound.ui.navigation.GraphRoutes
-import com.example.lostandfound.ui.viewmodels.CreateReportViewModel
+import com.example.lostandfound.ui.viewmodels.EditReportViewViewModel
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
-fun CreateReportView(navController: NavHostController) {
+fun EditReportView(
+    navController: NavHostController,
+    initialReport: Report,
+    imageBitmap: Bitmap? = null,
+    updateReport: ((ReportStats) -> Job)
+) {
 
-    val viewModel: CreateReportViewModel = viewModel()
+    val viewModel: EditReportViewViewModel = viewModel()
     val state = viewModel.state
     val scope = rememberCoroutineScope()
 
@@ -47,18 +57,24 @@ fun CreateReportView(navController: NavHostController) {
             navController.navigate(GraphRoutes.Auth)
         }
     }
+    LaunchedEffect(true) {
+        viewModel.setReport(initialReport, imageBitmap)
+    }
 
     if (state.getLocation) {
-        GetLocationView(changeLocation = {
-            viewModel.setReportStats(
-                state.reportStats.copy(
-                    latitude = it.latitude,
-                    longitude = it.longitude
+        GetLocationView(
+            changeLocation = {
+                viewModel.setReportStats(
+                    state.reportStats.copy(
+                        latitude = it.latitude,
+                        longitude = it.longitude
+                    )
                 )
-            )
-        }, exitGetLocation = {
-            state.getLocation = false
-        }, latLng = LatLng(0.0, 0.0)); return
+            },
+            latLng = LatLng(state.reportStats.latitude, state.reportStats.longitude),
+            exitGetLocation = {
+                state.getLocation = false
+            }); return
     }
 
     if (state.errorMessage.isNotEmpty()) {
@@ -82,7 +98,7 @@ fun CreateReportView(navController: NavHostController) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            LAFHeader(title = "Create Report", onBack = { navController.popBackStack() })
+            LAFHeader(title = "Edit Report", onBack = { navController.popBackStack() })
 
             LAFFormField(
                 value = state.reportStats.title,
@@ -166,12 +182,11 @@ fun CreateReportView(navController: NavHostController) {
 
         Divider(modifier = Modifier.padding(vertical = 16.dp))
 
-
         LAFLoadingButton(
-            onClick = { scope.launch { viewModel.createReport() } },
-            text = "Create",
+            onClick = { scope.launch { updateReport(state.reportStats) } },
+            text = "Save",
             loading = state.loading,
-            disabled = viewModel.isDirty(),
+            disabled = viewModel.isDirty()
         )
     }
 }

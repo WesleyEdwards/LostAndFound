@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import com.example.lostandfound.ui.models.Report
+import com.example.lostandfound.ui.models.ReportStatus
 import com.example.lostandfound.ui.repositories.ImagesRepo
 import com.example.lostandfound.ui.repositories.ReportRepo
 import com.example.lostandfound.ui.repositories.UserRepo
@@ -21,6 +22,9 @@ class LostReportScreenState() {
     var confirmDelete by mutableStateOf(false)
     var myReport by mutableStateOf(false)
     var loadingImage by mutableStateOf(false)
+    var contactModal by mutableStateOf(false)
+    var foundModal by mutableStateOf(false)
+
 
     var loading by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
@@ -61,6 +65,21 @@ class LostReportViewModel(application: Application) : AndroidViewModel(applicati
             state.errorMessage = e.message ?: "Unknown error"
         } finally {
             state.loading = false
+        }
+    }
+
+    suspend fun markAsFound() {
+        state.loading = true
+        state.errorMessage = ""
+        try {
+            state._report =
+                state._report?.copy(reportStats = state._report!!.reportStats.copy(status = ReportStatus.FOUND))
+            ReportRepo.updateReport(state.report!!)
+        } catch (e: Exception) {
+            state.errorMessage = e.message ?: "Unknown error"
+        } finally {
+            state.loading = false
+            state.foundModal = false
         }
     }
 

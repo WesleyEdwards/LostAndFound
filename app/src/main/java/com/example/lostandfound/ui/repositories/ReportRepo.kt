@@ -2,6 +2,7 @@ package com.example.lostandfound.ui.repositories
 
 import com.example.lostandfound.ui.models.Report
 import com.example.lostandfound.ui.models.ReportStats
+import com.example.lostandfound.ui.models.ReportStatus
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
@@ -19,6 +20,8 @@ object ReportRepo {
             val formattedReport = Report(
                 _id = UUID.randomUUID().toString(),
                 userId = it?.uid ?: "",
+                userEmail = it?.email ?: "",
+                userName = it?.displayName ?: "",
                 reportStats = createReport
             )
             reportsCache?.add(formattedReport)
@@ -36,12 +39,14 @@ object ReportRepo {
         return reportsCache?.filter { it.userId == UserRepo.getUser()?.uid } ?: mutableListOf()
     }
 
-    suspend fun getAllReports(): List<Report> {
+    suspend fun getAllActiveReports(): List<Report> {
         if (reportsCache == null) {
             return Firebase.firestore.collection(collectionPath)
                 .get().await().toObjects<Report>().apply { reportsCache = this.toMutableList() }
+                .filter { it.reportStats.status == ReportStatus.LOST }
         }
-        return reportsCache ?: mutableListOf()
+        return reportsCache
+            ?: mutableListOf<Report>().filter { it.reportStats.status == ReportStatus.LOST }
     }
 
     suspend fun getReport(reportId: String): Report? {
@@ -75,6 +80,12 @@ object ReportRepo {
                     report.reportStats
                 )?.await()
         }
+        return pullAndRecache()
+    }
+
+    private suspend fun pullAndRecache() {
+        return Firebase.firestore.collection(collectionPath)
+            .get().await().toObjects<Report>().toMutableList().let { reportsCache = it }
     }
 
     fun clearCache() {

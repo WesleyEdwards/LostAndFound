@@ -38,7 +38,7 @@ fun LAFLoadingButton(
                 if (showIcon) {
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
-                        contentDescription = "Next",
+                        contentDescription = "Check",
                         modifier = Modifier.padding(start = 8.dp)
                     )
                 }

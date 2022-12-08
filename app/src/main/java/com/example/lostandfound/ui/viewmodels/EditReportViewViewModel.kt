@@ -16,31 +16,41 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import java.io.File
 
-class CreateReportScreenState {
+
+class EditReportViewScreenState {
 
     var reportStats: ReportStats by mutableStateOf(ReportStats())
-    var initialStats: ReportStats by mutableStateOf(ReportStats())
+    var initialReport: Report by mutableStateOf(Report())
 
     var loading by mutableStateOf(false)
     var loadingImage by mutableStateOf(false)
     var creationSuccess by mutableStateOf(false)
     var getLocation by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
+    var imagePath by mutableStateOf("")
 
     var file: File = File.createTempFile("temp", "jpg")
     var bitmap: Bitmap? = null
 
 }
 
-class CreateReportViewModel(application: Application) : AndroidViewModel(application) {
-    var state = CreateReportScreenState()
+class EditReportViewViewModel(application: Application) : AndroidViewModel(application) {
+    var state = EditReportViewScreenState()
 
 
+    fun setReport(report: Report, imageBitmap: Bitmap?) {
+        state.initialReport = report
+        state.reportStats = report.reportStats
+        if (imageBitmap != null) {
+            state.bitmap = imageBitmap
+        }
+    }
 
     fun isDirty(): Boolean {
-        return state.reportStats == state.initialStats ||
-                state.reportStats.title.isEmpty() ||
-                state.reportStats.description.isEmpty()
+        return state.reportStats == state.initialReport.reportStats &&
+                state.reportStats.title == state.initialReport.reportStats.title &&
+                state.reportStats.description == state.initialReport.reportStats.description &&
+                state.imagePath == state.initialReport.reportStats.image
     }
 
     fun setReportStats(stats: ReportStats, image: Uri? = null) {
@@ -60,6 +70,7 @@ class CreateReportViewModel(application: Application) : AndroidViewModel(applica
             } else {
                 state.errorMessage = it.exception?.message ?: "Unknown error"
             }
+            state.imagePath = it.result.storage.name
         }
     }
 
