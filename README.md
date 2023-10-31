@@ -2,7 +2,10 @@
 
 This app was created as the final project for CS 3200 (Mobile App Dev)
 
-## Uses
+## Summary
+There are many lost and found bins in Logan Utah. This app provides a more efficient method of finding lost items than bins scattered around Logan. By using this app, users to create reports of items they have lost, and provides a way for the citizens of Logan to help each other find lost items.
+
+## Technologies Used
 - Firebase
 - Material UI
 
